@@ -1,2 +1,7 @@
+import './app.less';
+import test from './test.png';
+
 const root = document.querySelector('#root');
-root.innerHTML = 'hello, webpack!';
+const image = document.createElement('img');
+image.src = test;
+root.append(image);
