@@ -27,6 +27,14 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react', 'unicorn', 'promise', '@typescript-eslint', 'prettier'],
+  // settings: {
+  //   'import/resolver': {
+  //     node: {
+  //       extensions: ['.tsx', '.ts', '.js', '.json'],
+  //     },
+  //     typescript: {},
+  //   },
+  // },
   settings: {
     'import/resolver': {
       node: {
@@ -35,6 +43,7 @@ module.exports = {
       typescript: {},
     },
   },
+
   rules: {
     'import/extensions': [
       ERROR,
