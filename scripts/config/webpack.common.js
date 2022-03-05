@@ -1,34 +1,53 @@
-// eslint-disable-next-line unicorn/import-style
-const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const paths = require('../paths');
-const { isDev, PROJECT_PATH } = require('../constant');
+const { isDevelopment, isProduction } = require('../env');
+const { imageInlineSizeLimit } = require('../conf');
 
 const getCssLoaders = (importLoaders) => [
-  'style-loader',
+  isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
   {
     loader: 'css-loader',
     options: {
       modules: false,
-      sourceMap: isDev,
+      sourceMap: isDevelopment,
       importLoaders,
     },
   },
   {
     loader: 'postcss-loader',
+    options: {
+      postcssOptions: {
+        plugins: [
+          require('postcss-flexbugs-fixes'),
+          isProduction && [
+            'postcss-preset-env',
+            {
+              autoprefixer: {
+                grid: true,
+                flexbox: 'no-2009',
+              },
+              stage: 3,
+            },
+          ],
+        ].filter(Boolean),
+      },
+    },
   },
 ];
+
 module.exports = {
   entry: {
     app: paths.appIndex,
   },
-  output: {
-    filename: isDev ? 'js/[name].js' : 'js/[name].[hash:8].js',
-    path: resolve(PROJECT_PATH, './dist'),
+  cache: {
+    type: 'filesystem',
+    buildDependencies: {
+      config: [__filename],
+    },
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
@@ -37,6 +56,11 @@ module.exports = {
       Components: paths.appSrcComponents,
       Utils: paths.appSrcUtils,
     },
+  },
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    axios: 'axios',
   },
   module: {
     rules: [
@@ -47,69 +71,40 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.css/,
+        test: /\.css$/,
         use: getCssLoaders(1),
       },
       {
-        test: /\.less$/,
+        test: /\.scss$/,
         use: [
           ...getCssLoaders(2),
           {
-            loader: 'less-loader',
+            loader: 'sass-loader',
             options: {
-              sourceMap: isDev,
+              sourceMap: isDevelopment,
             },
           },
         ],
       },
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10 * 1024,
-              name: '[name].[contenthash:8].[ext]',
-              outputPath: 'assets/images',
-            },
+        type: 'asset',
+        parser: {
+          dataUrlCondition: {
+            maxSize: imageInlineSizeLimit,
           },
-        ],
+        },
       },
       {
-        test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              name: '[name].[contenthash:8].[ext]',
-              outputPath: 'assets/fonts',
-            },
-          },
-        ],
+        test: /\.(eot|svg|ttf|woff|woff2?)$/,
+        type: 'asset/resource',
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: resolve(PROJECT_PATH, './public/index.html'),
-      filename: 'index.html',
-      cache: false, // 特别重要：防止之后使用v6版本 copy-webpack-plugin 时代码修改一刷新页面为空问题。
-      minify: isDev
-        ? false
-        : {
-            removeAttributeQuotes: true,
-            collapseWhitespace: true,
-            removeComments: true,
-            collapseBooleanAttributes: true,
-            collapseInlineTagWhitespace: true,
-            removeRedundantAttributes: true,
-            removeScriptTypeAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            minifyCSS: true,
-            minifyJS: true,
-            minifyURLs: true,
-            useShortDoctype: true,
-          },
+      template: paths.appHtml,
+      cache: true,
     }),
     new CopyPlugin({
       patterns: [
@@ -127,18 +122,13 @@ module.exports = {
       ],
     }),
     new WebpackBar({
-      name: isDev ? '正在启动' : '正在打包',
-      color: '#fa8c16',
+      name: isDevelopment ? 'RUNNING' : 'BUNDLING',
+      color: isDevelopment ? '#52c41a' : '#722ed1',
     }),
     new ForkTsCheckerWebpackPlugin({
       typescript: {
         configFile: paths.appTsConfig,
       },
     }),
-    // new HardSourceWebpackPlugin(),
   ],
-  externals: {
-    react: 'React',
-    'react-dom': 'ReactDOM',
-  },
 };

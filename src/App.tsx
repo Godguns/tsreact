@@ -1,10 +1,17 @@
 import React from 'react';
 
-export function App() {
+interface IProps {
+  name: string;
+  age: number;
+}
+
+function App(props: IProps) {
+  const { name, age } = props;
   return (
-    <div className='App'>
-      {' '}
-      <p>helloworld</p>
+    <div className='app'>
+      <span>{`hi! I'm ${name}, ${age} 80 old.`}</span>
     </div>
   );
 }
+
+export default App;
