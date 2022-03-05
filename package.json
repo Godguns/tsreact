@@ -4,7 +4,7 @@
   "description": "Quickly create react17 + webpack5 + typescript project environment.",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config ./scripts/config/webpack.dev.js",
+    "start": "cross-env NODE_ENV=development node scripts/server ",
     "build": "cross-env NODE_ENV=production webpack --config ./scripts/config/webpack.prod.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "lint": "npm run lint-eslint && npm run lint-stylelint",
@@ -65,7 +65,7 @@
     "@commitlint/config-conventional": "^12.0.1",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.12",
-    "@types/webpack-env": "^1.16.0",
+    "@types/webpack-env": "^1.16.3",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "autoprefixer": "^10.4.2",
