@@ -7,7 +7,7 @@ const paths = require('../paths');
 module.exports = merge(common, {
   mode: 'development',
   devtool: 'cheap-module-source-map',
-  target: 'web',
+  target: 'web', // 这个是导致devserve失效的原因
   output: {
     filename: 'js/[name].js',
     path: paths.appBuild,

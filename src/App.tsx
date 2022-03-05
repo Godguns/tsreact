@@ -9,7 +9,7 @@ function App(props: IProps) {
   const { name, age } = props;
   return (
     <div className='app'>
-      <span>{`hi! I'm ${name}, ${age} 80 old.`}</span>
+      <span>{`hi! I'm ${name}, ${age} 777 old.`}</span>
     </div>
   );
 }
