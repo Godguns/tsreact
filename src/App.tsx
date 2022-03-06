@@ -1,4 +1,5 @@
 import React from 'react';
+import Login from 'Src/pages/login';
 
 interface IProps {
   name: string;
@@ -10,6 +11,7 @@ function App(props: IProps) {
   return (
     <div className='app'>
       <span>{`hi! I'm ${name}, ${age} 777 old.`}</span>
+      <Login />
     </div>
   );
 }
