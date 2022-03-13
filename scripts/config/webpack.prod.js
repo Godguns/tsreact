@@ -1,11 +1,18 @@
 const { merge } = require('webpack-merge');
+const Webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-// eslint-disable-next-line import/extensions
-const common = require('./webpack.common.js');
+const paths = require('../paths');
+const common = require('./webpack.common');
 
 module.exports = merge(common, {
   mode: 'production',
+  output: {
+    filename: 'js/[name].[contenthash:8].js',
+    path: paths.appBuild,
+    assetModuleFilename: 'images/[name].[contenthash:8].[ext]',
+    // banner: Global,
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new BundleAnalyzerPlugin({
