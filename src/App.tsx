@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from 'Src/pages/login';
+import IndexRouter from 'Src/router/indexRouter';
 
 interface IProps {
   name: string;
@@ -7,11 +7,11 @@ interface IProps {
 }
 
 function App(props: IProps) {
+  console.log('>>>');
   const { name, age } = props;
   return (
     <div className='app'>
-      <span>{`hi! I'm ${name}, ${age} 777 old.`}</span>
-      <Login />
+      <IndexRouter />
     </div>
   );
 }

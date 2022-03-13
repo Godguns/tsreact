@@ -1,4 +1,3 @@
-import { fromJS } from 'immutable';
 import * as constants from './constants';
 
 // 初始默认的state
