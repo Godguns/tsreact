@@ -14,6 +14,11 @@ module.exports = merge(common, {
       analyzerPort: 8888, // 端口号设置
     }),
   ].filter(Boolean),
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+    axios: 'axios',
+  },
   optimization: {
     splitChunks: {
       // include all types of chunks
