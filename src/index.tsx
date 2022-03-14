@@ -7,7 +7,6 @@ import store from './store';
 if (module && module.hot) {
   module.hot.accept();
 }
-
 ReactDOM.render(
   <Provider store={store}>
     <App name='vortesnail' age={25} />
